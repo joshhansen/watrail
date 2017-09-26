@@ -1,0 +1,20 @@
+html {
+    background-color: black;
+}
+#screen {
+    float: left;
+    font-family: monospace, fixed;
+    font-weight: bold;
+    width: 45%;
+}
+#log {
+    /*position: relative;*/
+    float:right;
+    font-family: monospace;
+    background-color: black;
+    text-decoration: none;
+    color: green;
+    font-size: 1.5em;
+    width: 45%;
+    padding-right: 1em;
+}
