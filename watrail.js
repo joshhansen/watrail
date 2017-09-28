@@ -187,6 +187,9 @@ function Vehicle(name, carryingCapacity, fuelType, fuelEfficiency) {
     this.fuelType = fuelType;
     this.fuelEfficiency = fuelEfficiency;
 }
+Vehicle.prototype.toString = function() {
+    return this.name;
+}
 
 const VEHICLE_SUV = new Vehicle("Seikan Brumby Crossover SUV", 65, FUEL_GASOLINE, 0.034);
 const VEHICLE_BIKE = new Vehicle("Jumbo Gravitas Mountain Bike", 3, FUEL_FOOD, 60);
@@ -248,17 +251,28 @@ function input(prompt, callback) {
     document.addEventListener('keydown', keydownHandler);
 };
 
-function select(prompt, options, callback) {
+const SELECT_LABELS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+function select(prompt, items, callback) {
     let log = logEl();
+    let labels = items.map(function(item, idx){
+        return SELECT_LABELS[idx];
+    });
 
-    options = options.map(function(x){return x.toString();});//Stringify since that's how the keypresses will come in
+    log.insertAdjacentHTML("beforeend", "<p>" + prompt + "</p>");
 
-    log.insertAdjacentHTML("beforeend", prompt);
+    let list = "<ol style=\"list-style-type:none;\">";
+    items.forEach(function(item, idx){
+        list += "<li>" + labels[idx] + ". " + item + "</li>";
+    });
+    list += "</ol>";
+
+    log.insertAdjacentHTML("beforeend", list);
+
     function listener(event) {
         console.log(event);
-        if(options.includes(event.key)) {
-            log.insertAdjacentHTML("beforeend", event.key);
-            callback(event.key);
+        if(labels.includes(event.key)) {
+            let selectedIdx = SELECT_LABELS.indexOf(event.key);
+            callback(items[selectedIdx], selectedIdx, event.key);
             document.removeEventListener("keydown", listener);
         }
     }
@@ -331,19 +345,8 @@ window.WATrail = {
                 input("Passenger 2: ", function(passenger2Name){
                     input("Passenger 3: ", function(passenger3Name){
 
-                        log("<p>Choose Your Vehicle:</p>");
-                        let list = "<ol>";
-                        VEHICLES.forEach(function(vehicle){
-                            list += "<li>" + vehicle.name + "</li>";
-                        });
-                        list += "</ol>";
-
-                        log(list);
-
-                        select("Select one: ", VEHICLES.map(function(vehicle, idx){ return idx+1; }), function(vehicleIdx){
-
-                            log(vehicleIdx);
-
+                        select("Choose Your Vehicle:", VEHICLES, function(vehicle, _idx, _key){
+                            log("Selected " + vehicle);
                         });
                     });
 
