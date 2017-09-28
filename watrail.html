@@ -12,17 +12,11 @@
               }
             }
             ready(function(){
-                let log = document.querySelectorAll("#log")[0];
-                window.WATrail.log = function(s) {
-                    log.insertAdjacentHTML("beforeend", s.replace(/\n/g, "<br/>"));
-                };
-                window.WATrail.clearLog = function() {
-                    log.innerHTML = "";
-                };
-
-               window.WATrail.start();
+                window.WATrail.start();
             });
        </script>
+       <title>Washington Trail</title>
+       <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
     </head>
     <body>
         <!-- 100 x 35 screen area -->

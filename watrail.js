@@ -173,19 +173,116 @@ PENDLETON     .connect(WEST, HERMISTON);
 HERMISTON     .connect(NORTH, KENNEWICK);
 
 
+const FUEL_GASOLINE = "gasoline";
+const FUEL_FOOD = "food";
+
+/*
+carryingCapacity: cubic feet or something
+fuelType: gasoline or food
+fuelEfficiency: gallons per mile or calories per mile
+*/
+function Vehicle(name, carryingCapacity, fuelType, fuelEfficiency) {
+    this.name = name;
+    this.carryingCapacity = carryingCapacity;
+    this.fuelType = fuelType;
+    this.fuelEfficiency = fuelEfficiency;
+}
+
+const VEHICLE_SUV = new Vehicle("Seikan Brumby Crossover SUV", 65, FUEL_GASOLINE, 0.034);
+const VEHICLE_BIKE = new Vehicle("Jumbo Gravitas Mountain Bike", 3, FUEL_FOOD, 60);
+const VEHICLES = [VEHICLE_SUV, VEHICLE_BIKE];
 
 function Game(startLocation) {
     this.playerLocation = startLocation;
     return this;
 }
 
+// https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+function randomID() {
+  return 'IDxxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+
+function logEl() {
+    return document.querySelectorAll("#log")[0];
+}
+function log(s) {
+    logEl().insertAdjacentHTML("beforeend", s.replace(/\n/g, "<br/>"));
+};
+function clearLog() {
+    logEl().innerHTML = "";
+};
+function input(prompt, callback) {
+    let log = logEl();
+    log.insertAdjacentHTML("beforeend", prompt);
+
+    let uuid = randomID();
+    log.insertAdjacentHTML("beforeend", "<span class=\"input\" id=\"" + uuid + "\"></span>");
+
+    let span = document.querySelector("#" + uuid);
+
+    let input = "";
+    function keydownHandler(event) {
+        console.log(event);
+
+        if(event.key.length == 1) {
+            span.insertAdjacentHTML("beforeend", event.key);
+            input += event.key;
+        }
+
+        if(event.key=="Enter") {
+            span.insertAdjacentHTML("beforeend", "<br/>");
+            callback(input);
+            document.removeEventListener("keydown", keydownHandler);
+        }
+
+        if(event.key=="Backspace") {
+            input = input.substring(0, input.length-1);
+            span.innerHTML = span.innerHTML.substring(0, span.innerHTML.length - 1);
+        }
+    };
+
+    document.addEventListener('keydown', keydownHandler);
+};
+
+function select(prompt, options, callback) {
+    let log = logEl();
+
+    options = options.map(function(x){return x.toString();});//Stringify since that's how the keypresses will come in
+
+    log.insertAdjacentHTML("beforeend", prompt);
+    function listener(event) {
+        console.log(event);
+        if(options.includes(event.key)) {
+            log.insertAdjacentHTML("beforeend", event.key);
+            callback(event.key);
+            document.removeEventListener("keydown", listener);
+        }
+    }
+
+    document.addEventListener("keydown", listener);
+}
+
+function showArt(name) {
+    let rqst = new XMLHttpRequest();
+
+    rqst.addEventListener("load", function(){
+        if(rqst.readyState==XMLHttpRequest.DONE) {
+            document.querySelector("#screen").innerHTML = rqst.responseText;
+        }
+    });
+    rqst.open("GET", "/art/" + name.replace(/ /g, "_") + ".html");
+    rqst.send();
+}
 
 window.WATrail = {
     start: function() {
+        let self = this;
 
-        let log = window.WATrail.log;
-
-        let game = new Game(SALT_LAKE_CITY);
+        self.game = new Game(SALT_LAKE_CITY);
 
         const homeState = randomKey(stateCapitals);
         const homeTown = stateCapitals[homeState];
@@ -208,9 +305,51 @@ window.WATrail = {
         log("<p>[Press any key]</p>");
 
         document.querySelectorAll("body")[0].addEventListener("keypress", function(){
-            window.WATrail.clearLog();
-            log("Welcome to " + game.playerLocation);
+            // clearLog();
+            // log("Welcome to " + game.playerLocation);
+            self.selectVehicle();
         }, {once: true});
+    },
+
+    showLocationArt: function() {
+        showArt(this.game.playerLocation.name);
+    },
+
+    selectVehicle: function() {
+        let self = this;
+
+        self.showLocationArt();
+        clearLog();
+        log("<p>Your journey begins in " + self.game.playerLocation + "</p>");
+
+        log("<p>Gather your people:</p>");
+
+        input("Your Name: ", function(yourName){
+            input("Passenger 1: ", function(passenger1Name){
+                input("Passenger 2: ", function(passenger2Name){
+                    input("Passenger 3: ", function(passenger3Name){
+
+                        log("<p>Choose Your Vehicle:</p>");
+                        let list = "<ol>";
+                        VEHICLES.forEach(function(vehicle){
+                            list += "<li>" + vehicle.name + "</li>";
+                        });
+                        list += "</ol>";
+
+                        log(list);
+
+                        select("Select one: ", VEHICLES.map(function(vehicle, idx){ return idx+1; }), function(vehicleIdx){
+
+                            log(vehicleIdx);
+
+                        });
+                    });
+
+                });
+
+            });
+
+        });
     }
 };
 
