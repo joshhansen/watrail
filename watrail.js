@@ -287,6 +287,8 @@ window.WATrail = {
         const homeState = randomKey(stateCapitals);
         const homeTown = stateCapitals[homeState];
 
+        showArt("flag.WA");
+
         log("<h1>Washington Trail</h1>");
 
         log("<p>The apocalypse has come.</p>");
