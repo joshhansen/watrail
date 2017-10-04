@@ -68,6 +68,24 @@ function randomProperty (obj) {
     return obj[keys[ keys.length * Math.random() << 0]];
 }
 
+// Standard Normal variate using Box-Muller transform.
+// https://stackoverflow.com/a/36481059/5374919
+function randStandardNormal() {
+    var u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+}
+
+function randNormal(mu, sigma) {
+    return mu + sigma * randStandardNormal();
+}
+
+// https://stats.stackexchange.com/questions/110961/sampling-from-a-lognormal-distribution
+function randLogNormal(mu, sigma) {
+    return Math.exp(randNormal(mu, sigma));
+}
+
 const stateCapitals = {
     "Alabama": "Montgomery",
     "Alaska": "Juneau",
@@ -120,6 +138,7 @@ const stateCapitals = {
     "Wyoming": "Cheyenne"
 };
 
+const LOCATIONS = [];
 function Location(name) {
     var self = this;
     this.name = name;
@@ -129,6 +148,9 @@ function Location(name) {
         loc2.connections[direction.opposite] = self;
         return self;
     };
+
+    LOCATIONS.push(this);
+
     return this;
 }
 
@@ -172,6 +194,10 @@ PENDLETON     .connect(NORTH, WALLA_WALLA);
 PENDLETON     .connect(WEST, HERMISTON);
 HERMISTON     .connect(NORTH, KENNEWICK);
 
+LOCATIONS.forEach(function(loc){
+    loc.radioactivity = randLogNormal(10, 10);// μSv/hour
+});
+
 
 const FUEL_GASOLINE = "gasoline";
 const FUEL_FOOD = "food";
@@ -181,8 +207,9 @@ carryingCapacity: cubic feet or something
 fuelType: gasoline or food
 fuelEfficiency: gallons per mile or calories per mile
 */
-function Vehicle(name, carryingCapacity, fuelType, fuelEfficiency) {
+function Vehicle(name, passengerCapacity, carryingCapacity, fuelType, fuelEfficiency) {
     this.name = name;
+    this.passengerCapacity = passengerCapacity;
     this.carryingCapacity = carryingCapacity;
     this.fuelType = fuelType;
     this.fuelEfficiency = fuelEfficiency;
@@ -191,12 +218,14 @@ Vehicle.prototype.toString = function() {
     return this.name;
 }
 
-const VEHICLE_SUV = new Vehicle("Seikan Brumby Crossover SUV", 65, FUEL_GASOLINE, 0.034);
-const VEHICLE_BIKE = new Vehicle("Jumbo Gravitas Mountain Bike", 3, FUEL_FOOD, 60);
+const VEHICLE_SUV = new Vehicle("Seikan Brumby Crossover SUV", 5, 65, FUEL_GASOLINE, 0.034);
+const VEHICLE_BIKE = new Vehicle("Jumbo Gravitas Mountain Bike", 1, 3, FUEL_FOOD, 60);
 const VEHICLES = [VEHICLE_SUV, VEHICLE_BIKE];
 
 function Game(startLocation) {
     this.playerLocation = startLocation;
+    this.people = [];
+    this.vehicle = undefined;
     return this;
 }
 
@@ -208,7 +237,7 @@ function randomID() {
   });
 }
 
-
+/* UI Functions */
 function logEl() {
     return document.querySelectorAll("#log")[0];
 }
@@ -292,6 +321,31 @@ function showArt(name) {
     rqst.send();
 }
 
+function Level(name, level) {
+    this.name = name;
+    this.level = level;
+}
+
+// const SATIATION_STARVED = new Level("starved", 0);
+const SATIATION_STARVING = new Level("starving", 1);
+const SATIATION_HUNGRY = new Level("hungry", 2);
+const SATIATION_SATIATED = new Level("satiated", 3);
+const SATIATION_FULL = new Level("full", 4);
+const SATIATION_VERY_FULL = new Level("very full", 5);
+
+const THIRST_DESSICATED = new Level("dessicated", 1);
+const THIRST_THIRSTY = new Level("thirsty", 2);
+const THIRST_SATIATED = new level("satiated", 3);
+const THIRST_FULL = new Level("full", 4);
+const THIRST_VERY_FULL = new Level("very full", 5);
+
+function Person(name) {
+    this.name = name;
+    this.hunger = SATIATION_SATIATED;
+    this.thirst = THIRST_SATIATED;
+    this.cumRadiation = 0.0;// μSv
+}
+
 window.WATrail = {
     start: function() {
         let self = this;
@@ -323,7 +377,7 @@ window.WATrail = {
         document.querySelectorAll("body")[0].addEventListener("keypress", function(){
             // clearLog();
             // log("Welcome to " + game.playerLocation);
-            self.selectVehicle();
+            self.configureParty();
         }, {once: true});
     },
 
@@ -331,7 +385,7 @@ window.WATrail = {
         showArt(this.game.playerLocation.name);
     },
 
-    selectVehicle: function() {
+    configureParty: function() {
         let self = this;
 
         self.showLocationArt();
@@ -341,21 +395,73 @@ window.WATrail = {
         log("<p>Gather your people:</p>");
 
         input("Your Name: ", function(yourName){
+            self.game.people.push(new Person(yourName));
             input("Passenger 1: ", function(passenger1Name){
+                self.game.people.push(new Person(passenger1Name));
                 input("Passenger 2: ", function(passenger2Name){
+                    self.game.people.push(new Person(passenger2Name));
                     input("Passenger 3: ", function(passenger3Name){
-
+                        self.game.people.push(new Person(passenger3Name));
                         select("Choose Your Vehicle:", VEHICLES, function(vehicle, _idx, _key){
                             log("Selected " + vehicle);
+                            self.game.vehicle = vehicle;
                         });
                     });
-
                 });
-
             });
-
         });
+    },
+
+    visitLocation: function() {
+        let self = this;
+
+        self.showLocationArt();
+        clearLog();
+        log("<p>You reach " + self.game.playerLocation + "</p>");
     }
+    /*
+
+Fuel types:
+    food
+    gasoline
+    electricity
+
+Fuel sources:
+    hunting -> food
+    theft/barter -> gasoline
+    generation/car battery/solar cells -> electricity
+
+Water
+    dirty (radioactive, bacterial)
+
+Radiation protection (see https://www.ready.gov/nuclear-blast)
+    shielding for car
+    protective suits
+
+Medicine
+
+
+
+
+Starting supplies:
+
+
+Vehicle
+
+
+
+People
+    cumulative radiation exposure
+    hunger
+    thirst
+    body temperature (hot/cold)
+
+    weapons
+    clothes
+    radiation suits
+
+
+    */
 };
 
 })();
