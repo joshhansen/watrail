@@ -405,6 +405,8 @@ window.WATrail = {
                         select("Choose Your Vehicle:", VEHICLES, function(vehicle, _idx, _key){
                             log("Selected " + vehicle);
                             self.game.vehicle = vehicle;
+
+                            self.visitLocation(false);
                         });
                     });
                 });
@@ -412,12 +414,18 @@ window.WATrail = {
         });
     },
 
-    visitLocation: function() {
+    visitLocation: function(justArrived) {
         let self = this;
 
         self.showLocationArt();
         clearLog();
-        log("<p>You reach " + self.game.playerLocation + "</p>");
+
+        if(justArrived) {
+            log("<p>You reach " + self.game.playerLocation + "</p>");
+        }
+
+        
+        log("<p>From " + self.game.playerLocation + " you can reach the following destinations:");
     }
     /*
 
