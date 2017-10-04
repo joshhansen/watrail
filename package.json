@@ -1,0 +1,23 @@
+{
+  "name": "watrail",
+  "version": "0.1.0",
+  "description": "Washington Trail: the Apocalypse Has Come Edit",
+  "main": "watrail.js",
+  "dependencies": {
+    "webpack": "^3.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshhansen/watrail.git"
+  },
+  "author": "Josh Hansen",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/joshhansen/watrail/issues"
+  },
+  "homepage": "https://github.com/joshhansen/watrail#readme"
+}

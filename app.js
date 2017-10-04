@@ -335,7 +335,7 @@ const SATIATION_VERY_FULL = new Level("very full", 5);
 
 const THIRST_DESSICATED = new Level("dessicated", 1);
 const THIRST_THIRSTY = new Level("thirsty", 2);
-const THIRST_SATIATED = new level("satiated", 3);
+const THIRST_SATIATED = new Level("satiated", 3);
 const THIRST_FULL = new Level("full", 4);
 const THIRST_VERY_FULL = new Level("very full", 5);
 
@@ -424,7 +424,7 @@ window.WATrail = {
             log("<p>You reach " + self.game.playerLocation + "</p>");
         }
 
-        
+
         log("<p>From " + self.game.playerLocation + " you can reach the following destinations:");
     }
     /*
