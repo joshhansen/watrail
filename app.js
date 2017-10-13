@@ -1,9 +1,4 @@
-import ui from './ui';
-let log = ui.log;
-let clearLog = ui.clearLog;
-let input = ui.input;
-let select = ui.select;
-let showArt = ui.showArt;
+import {log, clearLog, input, select, showArt} from './ui';
 
 (function(){
 

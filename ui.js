@@ -11,13 +11,13 @@ function randomID() {
 function logEl() {
     return document.querySelectorAll("#log")[0];
 }
-function log(s) {
+export function log(s) {
     logEl().insertAdjacentHTML("beforeend", s.replace(/\n/g, "<br/>"));
 };
-function clearLog() {
+export function clearLog() {
     logEl().innerHTML = "";
 };
-function input(prompt, callback) {
+export function input(prompt, callback) {
     let log = logEl();
     log.insertAdjacentHTML("beforeend", prompt);
 
@@ -51,7 +51,7 @@ function input(prompt, callback) {
 };
 
 const SELECT_LABELS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-function select(prompt, items, callback) {
+export function select(prompt, items, callback) {
     let log = logEl();
     let labels = items.map(function(item, idx){
         return SELECT_LABELS[idx];
@@ -79,7 +79,7 @@ function select(prompt, items, callback) {
     document.addEventListener("keydown", listener);
 }
 
-function showArt(name) {
+export function showArt(name) {
     let rqst = new XMLHttpRequest();
 
     rqst.addEventListener("load", function(){
