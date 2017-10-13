@@ -1,7 +1,7 @@
 {
   "name": "watrail",
   "version": "0.1.0",
-  "description": "Washington Trail: the Apocalypse Has Come Edit",
+  "description": "Washington Trail: the Apocalypse Has Come",
   "main": "watrail.js",
   "dependencies": {
     "webpack": "^3.6.0"
