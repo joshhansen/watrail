@@ -151,6 +151,7 @@ function Location(name) {
         return self;
     };
 
+
     LOCATIONS.push(this);
 
     return this;
@@ -168,6 +169,9 @@ function connect(loc1, direction, loc2) {
 function Direction(name) {
     this.name = name;
     return this;
+}
+Direction.prototype.toString = function() {
+    return this.name;
 }
 
 const NORTH = new Direction("north");
@@ -326,6 +330,8 @@ window.WATrail = {
     },
 
     visitLocation: function(justArrived) {
+        justArrived = justArrived || true;
+
         let self = this;
 
         self.showLocationArt();
@@ -336,7 +342,20 @@ window.WATrail = {
         }
 
 
-        log("<p>From " + self.game.playerLocation + " you can reach the following destinations:");
+        // log("<p>From " + self.game.playerLocation + " you can reach the following destinations:");
+        //
+        // let connections = self.game.playerLocation.connections;
+        // log("<ul>");
+        // Object.keys(connections).forEach(function(direction){
+        //     let conLoc = connections[direction];
+        //     log("<li>" + direction + " -> " + conLoc + "</li>");
+        // });
+        // log("</ul>");
+
+        select("Choose your next destination:", Object.values(connections), function(conLoc, _idx, _key){
+            self.game.playerLocation = conLoc;
+            self.visitLocation()
+        });
     }
     /*
 
