@@ -79,16 +79,20 @@ export function select(prompt, items, callback) {
     document.addEventListener("keydown", listener);
 }
 
-export function showArt(name) {
-    let rqst = new XMLHttpRequest();
+// export function showArt(name) {
+//     let rqst = new XMLHttpRequest();
+//
+//     rqst.addEventListener("load", function(){
+//         if(rqst.readyState==XMLHttpRequest.DONE) {
+//             document.querySelector("#screen").innerHTML = rqst.responseText;
+//         }
+//     });
+//     rqst.open("GET", "/art/" + name.replace(/ /g, "_") + ".html");
+//     rqst.send();
+// }
 
-    rqst.addEventListener("load", function(){
-        if(rqst.readyState==XMLHttpRequest.DONE) {
-            document.querySelector("#screen").innerHTML = rqst.responseText;
-        }
-    });
-    rqst.open("GET", "/art/" + name.replace(/ /g, "_") + ".html");
-    rqst.send();
+export function showArt(name) {
+    document.querySelector("img#screen").src = "/art_cga_320_200/" + name.replace(/ /g, "_") + ".png";
 }
 
 export default {
