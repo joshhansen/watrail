@@ -1,6 +1,6 @@
 module.exports = {
-  entry: './app.js',
+  entry: './src/app.js',
   output: {
-    filename: 'watrail.js'
+    filename: './dist/watrail.js'
   }
 }
