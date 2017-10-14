@@ -344,7 +344,7 @@ window.WATrail = {
 
         // log("<p>From " + self.game.playerLocation + " you can reach the following destinations:");
         //
-        // let connections = self.game.playerLocation.connections;
+        let connections = self.game.playerLocation.connections;
         // log("<ul>");
         // Object.keys(connections).forEach(function(direction){
         //     let conLoc = connections[direction];
