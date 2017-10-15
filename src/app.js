@@ -11,32 +11,37 @@ carryingCapacity: cubic feet or something
 fuelType: gasoline or food
 fuelEfficiency: gallons per mile or calories per mile
 */
-function Vehicle(name, passengerCapacity, carryingCapacity, fuelType, fuelEfficiency) {
-    this.name = name;
-    this.passengerCapacity = passengerCapacity;
-    this.carryingCapacity = carryingCapacity;
-    this.fuelType = fuelType;
-    this.fuelEfficiency = fuelEfficiency;
-}
-Vehicle.prototype.toString = function() {
-    return this.name;
+class Vehicle {
+    constructor(name, passengerCapacity, carryingCapacity, fuelType, fuelEfficiency) {
+        this.name = name;
+        this.passengerCapacity = passengerCapacity;
+        this.carryingCapacity = carryingCapacity;
+        this.fuelType = fuelType;
+        this.fuelEfficiency = fuelEfficiency;
+    }
+
+    toString() {
+        return this.name;
+    }
 }
 
 const VEHICLE_SUV = new Vehicle("Seikan Brumby Crossover SUV", 5, 65, FUEL_GASOLINE, 0.034);
 const VEHICLE_BIKE = new Vehicle("Jumbo Gravitas Mountain Bike", 1, 3, FUEL_FOOD, 60);
 const VEHICLES = [VEHICLE_SUV, VEHICLE_BIKE];
 
-function Game(startLocation) {
-    this.playerLocation = startLocation;
-    this.people = [];
-    this.vehicle = undefined;
-    return this;
+class Game {
+    constructor(startLocation) {
+        this.playerLocation = startLocation;
+        this.people = [];
+        this.vehicle = undefined;
+    }
 }
 
-
-function Level(name, level) {
-    this.name = name;
-    this.level = level;
+class Level {
+    constructor(name, level) {
+        this.name = name;
+        this.level = level;
+    }
 }
 
 // const SATIATION_STARVED = new Level("starved", 0);
@@ -52,11 +57,13 @@ const THIRST_SATIATED = new Level("satiated", 3);
 const THIRST_FULL = new Level("full", 4);
 const THIRST_VERY_FULL = new Level("very full", 5);
 
-function Person(name) {
-    this.name = name;
-    this.hunger = SATIATION_SATIATED;
-    this.thirst = THIRST_SATIATED;
-    this.cumRadiation = 0.0;// μSv
+class Person {
+    constructor(name) {
+        this.name = name;
+        this.hunger = SATIATION_SATIATED;
+        this.thirst = THIRST_SATIATED;
+        this.cumRadiation = 0.0;// μSv
+    }
 }
 
 window.WATrail = {
