@@ -127,12 +127,14 @@ class Location {
     }
 }
 
-function Direction(name) {
-    this.name = name;
-    return this;
-}
-Direction.prototype.toString = function() {
-    return this.name;
+class Direction {
+    constructor(name) {
+        this.name = name;
+    }
+
+    toString() {
+        return this.name;
+    }
 }
 
 const NORTH = new Direction("north");
