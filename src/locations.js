@@ -55,59 +55,10 @@ WY	Wyoming	Cheyenne	July 10, 1890
 */
 
 
-export const stateCapitals = {
-    "Alabama": "Montgomery",
-    "Alaska": "Juneau",
-    "Arizona": "Phoenix",
-    "Arkansas": "Little Rock",
-    "California": "Sacramento",
-    "Colorado": "Denver",
-    "Connecticut": "Hartford",
-    "Delaware": "Dover",
-    "Florida": "Tallahassee",
-    "Georgia": "Atlanta",
-    "Hawaii": "Honolulu",
-    "Idaho": "Boise",
-    "Illinois": "Springfield",
-    "Indiana": "Indianapolis",
-    "Iowa": "Des Moines",
-    "Kansas": "Topeka",
-    "Louisiana": "Frankfort",
-    "Maine": "Augusta",
-    "Maryland": "Annapolis",
-    "Massacusetts": "Boston",
-    "Michigan": "Lansing",
-    "Minnesota": "Saint Paul",
-    "Mississippi": "Jackson",
-    "Missouri": "Jefferson City",
-    "Montana": "Helena",
-    "Nebraska": "Lincoln",
-    "Nevada": "Carson City",
-    "New Hampshire": "Concord",
-    "New Jersey": "Trenton",
-    "New Mexico": "Santa Fe",
-    "New York": "Albany",
-    "North Carolina": "Raleigh",
-    "North Dakota": "Bismarck",
-    "Ohio": "Columbus",
-    "Oklahoma": "Oklahoma City",
-    "Oregon": "Salem",
-    "Pennsylvania": "Harrisburg",
-    "Rhode Island": "Providence",
-    "South Carolina": "Columbia",
-    "South Dakota": "Pierre",
-    "Tennessee": "Nashville",
-    "Texas": "Austin",
-    "Utah": "Salt Lake City",
-    "Vermont": "Montpelier",
-    "Virginia": "Richmond",
-    // "Washington": "Olympia",
-    "West Virginia": "Charleston",
-    "Wisconsin": "Madison",
-    "Wyoming": "Cheyenne"
-};
+
 
 export const LOCATIONS = [];
+
 class Location {
     constructor(name, locatedIn) {
         this.name = name;
@@ -124,6 +75,25 @@ class Location {
 
     toString() {
         return this.name;
+    }
+}
+
+export const STATES = [];
+class State extends Location {
+    constructor(name, locatedIn) {
+        super(name, locatedIn);
+        STATES.push(this);
+    }
+}
+
+export const CITIES = [];
+class City extends Location {
+    constructor(name, locatedIn, isCapital) {
+        super(name, locatedIn);
+        if(isCapital) {
+            locatedIn.capital = this;
+        }
+        CITIES.push(this);
     }
 }
 
@@ -146,14 +116,142 @@ SOUTH.opposite = NORTH;
 EAST.opposite = WEST;
 WEST.opposite = EAST;
 
-export const SALT_LAKE_CITY = new Location("Salt Lake City");
-const TREMONTON = new Location("Tremonton");
-const BOISE = new Location("Boise");
-const LA_GRANDE = new Location("La Grande");
-const PENDLETON = new Location("Pendleton");
-const HERMISTON = new Location("Hermiston");
-const WALLA_WALLA = new Location("Walla Walla");
-const KENNEWICK = new Location("Kennewick");
+const USA = new Location("United States");
+
+const ALABAMA = new State("Alabama", USA);
+const ALASKA = new State("Alaska", USA);
+const ARIZONA = new State("Arizona", USA);
+const ARKANSAS = new State("Arkansas", USA);
+const CALIFORNIA = new State("California", USA);
+const COLORADO = new State("Colorado", USA);
+const CONNECTICUT = new State("Connecticut", USA);
+const DELAWARE = new State("Delaware", USA);
+const FLORIDA = new State("Florida", USA);
+const GEORGIA = new State("Georgia", USA);
+const HAWAII = new State("Hawaii", USA);
+const IDAHO = new State("Idaho", USA);
+const ILLINOIS = new State("Illinois", USA);
+const INDIANA = new State("Indiana", USA);
+const IOWA = new State("Iowa", USA);
+const KANSAS = new State("Kansas", USA);
+const KENTUCKY = new State("Kentucky", USA);
+const LOUISIANA = new State("Louisiana", USA);
+const MAINE = new State("Maine", USA);
+const MARYLAND = new State("Maryland", USA);
+const MASSACHUSETTS = new State("Massachusetts", USA);
+const MICHIGAN = new State("Michigan", USA);
+const MINNESOTA = new State("Minnesota", USA);
+const MISSISSIPPI = new State("Mississippi", USA);
+const MISSOURI = new State("Missouri", USA);
+const MONTANA = new State("Montana", USA);
+const NEBRASKA = new State("Nebraska", USA);
+const NEVADA = new State("Nevada", USA);
+const NEW_HAMPSHIRE = new State("New Hampshire", USA);
+const NEW_JERSEY = new State("New Jersey", USA);
+const NEW_MEXICO = new State("New Mexico", USA);
+const NEW_YORK = new State("New York", USA);
+const NORTH_CAROLINA = new State("North Carolina", USA);
+const NORTH_DAKOTA = new State("North Dakota", USA);
+const OHIO = new State("Ohio", USA);
+const OKLAHOMA = new State("Oklahoma", USA);
+const OREGON = new State("Oregon", USA);
+const PENNSYLVANIA = new State("Pennsylvania", USA);
+const RHODE_ISLAND = new State("Rhode Island", USA);
+const SOUTH_CAROLINA = new State("South Carolina", USA);
+const SOUTH_DAKOTA = new State("South Dakota", USA);
+const TENNESSEE = new State("Tennessee", USA);
+const TEXAS = new State("Texas", USA);
+const UTAH = new State("Utah", USA);
+const VERMONT = new State("Vermont", USA);
+const VIRGINIA = new State("Virginia", USA);
+const WASHINGTON = new State("Washington", USA);
+const WEST_VIRGINIA = new State("West Virginia", USA);
+const WISCONSIN = new State("Wisconsin", USA);
+const WYOMING = new State("Wyoming", USA);
+
+
+
+
+
+
+
+
+
+export const POSSIBLE_HOME_STATES = [
+    UTAH
+];
+
+export const POSSIBLE_DESTINATION_STATES = [
+    WASHINGTON
+];
+
+const MONTGOMERY = new City("Montgomery", ALABAMA, true);
+const JUNEAU = new City("Juneau", ALASKA, true);
+const PHOENIX = new City("Phoenix", ARIZONA, true);
+const LITTLE_ROCK = new City("Little Rock", ARKANSAS, true);
+const SACRAMENTO = new City("Sacramento", CALIFORNIA, true);
+const DENVER = new City("Denver", COLORADO, true);
+const HARTFORD = new City("Hartford", CONNECTICUT, true);
+const DOVER = new City("Dover", DELAWARE, true);
+const TALLAHASSEE = new City("Tallahassee", FLORIDA, true);
+const ATLANTA = new City("Atlanta", GEORGIA, true);
+const HONOLULU = new City("Honolulu", HAWAII, true);
+
+const BOISE = new City("Boise", IDAHO, true);
+
+const SPRINGFIELD = new City("Springfield", ILLINOIS, true);
+const INDIANAPOLIS = new City("Indianapolis", INDIANA, true);
+const DES_MOINES = new City("Des Moines", IOWA, true);
+const TOPEKA = new City("Topeka", KANSAS, true);
+const FRANKFORT = new City("Frankfort", KENTUCKY, true);
+const BATON_ROUGE = new City("Baton Rouge", LOUISIANA, true);
+const AUGUSTA = new City("Augusta", MAINE, true);
+const ANNAPOLIS = new City("Annapolis", MARYLAND, true);
+const BOSTON = new City("Boston", MASSACHUSETTS, true);
+const LANSING = new City("Lansing", MICHIGAN, true);
+const SAINT_PAUL = new City("Saint Paul", MINNESOTA, true);
+const JACKSON = new City("Jackson", MISSISSIPPI, true);
+const JEFFERSON_CITY = new City("Jefferson City", MISSOURI, true);
+const HELENA = new City("Helena", MONTANA, true);
+const LINCOLN = new City("Lincoln", NEBRASKA, true);
+const CARSON_CITY = new City("Carson City", NEVADA, true);
+const CONCORD = new City("Concord", NEW_HAMPSHIRE, true);
+const TRENTON = new City("Trenton", NEW_JERSEY, true);
+const SANTA_FE = new City("Santa Fe", NEW_MEXICO, true);
+const ALBANY = new City("Albany", NEW_YORK, true);
+const RALEIGH = new City("Raleigh", NORTH_CAROLINA, true);
+const BISMARCK = new City("Bismarck", NORTH_DAKOTA, true);
+const COLUMBUS = new City("Columbus", OHIO, true);
+const OKLAHOMA_CITY = new City("Oklahoma City", OKLAHOMA, true);
+
+const SALEM = new City("Salem", OREGON, true);
+const LA_GRANDE = new City("La Grande", OREGON);
+const PENDLETON = new City("Pendleton", OREGON);
+const HERMISTON = new City("Hermiston", OREGON);
+
+
+const HARRISBURG = new City("Harrisburg", PENNSYLVANIA, true);
+const PROVIDENCE = new City("Providence", RHODE_ISLAND, true);
+const COLUMBIA = new City("Columbia", SOUTH_CAROLINA, true);
+const PIERRE = new City("Pierre", SOUTH_DAKOTA, true);
+const NASHVILLE = new City("Nashville", TENNESSEE, true);
+const AUSTIN = new City("Austin", TEXAS, true);
+
+const SALT_LAKE_CITY = new City("Salt Lake City", UTAH, true);
+const TREMONTON = new City("Tremonton", UTAH);
+
+const MONTPELIER = new City("Montpelier", VERMONT, true);
+const RICHMOND = new City("Richmond", VIRGINIA, true);
+
+const OLYMPIA = new City("Olympia", WASHINGTON, true);
+const WALLA_WALLA = new Location("Walla Walla", WASHINGTON);
+const KENNEWICK = new Location("Kennewick", WASHINGTON);
+
+const CHARLESTON = new City("Charleston", WEST_VIRGINIA, true);
+const MADISON = new City("Madison", WISCONSIN, true);
+const CHEYENNE = new City("Cheyenne", WYOMING, true);
+
+
 
 SALT_LAKE_CITY.connect(NORTH, TREMONTON);
 TREMONTON     .connect(NORTH, BOISE);
@@ -163,6 +261,9 @@ PENDLETON     .connect(NORTH, WALLA_WALLA);
 PENDLETON     .connect(WEST, HERMISTON);
 HERMISTON     .connect(NORTH, KENNEWICK);
 
-LOCATIONS.forEach(function(loc){
+
+
+
+CITIES.forEach(function(loc){
     loc.radioactivity = randLogNormal(10, 10);// μSv/hour
 });

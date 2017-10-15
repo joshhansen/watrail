@@ -1,6 +1,6 @@
-import {SALT_LAKE_CITY, stateCapitals} from './locations';
+import {POSSIBLE_HOME_STATES, POSSIBLE_DESTINATION_STATES} from './locations';
 import {log, clearLog, input, select, showArt} from './ui';
-import {randomKey} from './util';
+import {randomElement, randomKey} from './util';
 
 (function(){
 const FUEL_GASOLINE = "gasoline";
@@ -70,10 +70,14 @@ window.WATrail = {
     start: function() {
         let self = this;
 
-        self.game = new Game(SALT_LAKE_CITY);
 
-        const homeState = randomKey(stateCapitals);
-        const homeTown = stateCapitals[homeState];
+
+        const homeState = randomElement(POSSIBLE_HOME_STATES);
+        const homeTown = homeState.capital;
+
+        const destinationState = randomElement(POSSIBLE_DESTINATION_STATES);
+
+        self.game = new Game(homeTown);
 
         showArt("flag.WA");
 
