@@ -108,29 +108,23 @@ export const stateCapitals = {
 };
 
 export const LOCATIONS = [];
-function Location(name) {
-    var self = this;
-    this.name = name;
-    this.connections = {};
-    this.connect = function(direction, loc2) {
-        self.connections[direction] = loc2;
-        loc2.connections[direction.opposite] = self;
-        return self;
-    };
+class Location {
+    constructor(name, locatedIn) {
+        this.name = name;
+        this.locatedIn = locatedIn;
+        this.connections = {};
+        LOCATIONS.push(this);
+    }
 
+    connect(direction, loc2) {
+        this.connections[direction] = loc2;
+        loc2.connections[direction.opposite] = this;
+        return this;
+    }
 
-    LOCATIONS.push(this);
-
-    return this;
-}
-
-Location.prototype.toString = function() {
-    return this.name;
-}
-
-function connect(loc1, direction, loc2) {
-    loc1.connections[direction] = loc2;
-    loc2.connections[direction.opposite] = loc1;
+    toString() {
+        return this.name;
+    }
 }
 
 function Direction(name) {
